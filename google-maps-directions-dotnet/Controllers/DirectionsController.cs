@@ -20,8 +20,6 @@ namespace google_maps_directions_dotnet.Controllers
         /// <returns>Directions</returns>
         public HttpResponseMessage Get()
         {
-            Directions dirs = new Directions();
-
             // Verify we were passed to and from parameters.
             NameValueCollection queryString = this.Request.RequestUri.ParseQueryString();
 
@@ -48,7 +46,7 @@ namespace google_maps_directions_dotnet.Controllers
             }
 
             // We seem to have params. Get the directions.
-            dirs = m_directionsProvider.getDirections(from, to);
+            Directions dirs = m_directionsProvider.getDirections(from, to);
 
             try
             {
