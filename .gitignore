@@ -1,0 +1,4 @@
+google-maps-directions-dotnet/bin
+google-maps-directions-dotnet/obj
+*.suo
+packages
