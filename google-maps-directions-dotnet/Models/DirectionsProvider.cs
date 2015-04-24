@@ -33,7 +33,7 @@ namespace google_maps_directions_dotnet.Models
         /// <param name="from">Starting point.</param>
         /// <param name="to">Ending point.</param>
         /// <returns>Directions object. May be empty on error.</returns>
-        public Directions getDirections(string from, string to)
+        public async Task<Directions> getDirections(string from, string to)
         {
             Directions dirs = null;
 
@@ -53,7 +53,7 @@ namespace google_maps_directions_dotnet.Models
 
             Uri uri = restClient.BuildUri(request);
 
-            IRestResponse response = restClient.Execute(request);
+            IRestResponse response = await restClient.ExecuteTaskAsync(request);
 
             if (response.ResponseStatus == ResponseStatus.Completed)
             {

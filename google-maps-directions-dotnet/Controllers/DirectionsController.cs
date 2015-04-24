@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace google_maps_directions_dotnet.Controllers
@@ -18,46 +19,17 @@ namespace google_maps_directions_dotnet.Controllers
         /// Get directions from Google Directions API
         /// </summary>
         /// <returns>Directions</returns>
-        public HttpResponseMessage Get()
+        public async Task<Directions> Get(string from, string to)
         {
-            // Verify we were passed to and from parameters.
-            NameValueCollection queryString = this.Request.RequestUri.ParseQueryString();
-
-            bool bMissingParams = false;
-
-            string from = "";
-            if (!string.IsNullOrWhiteSpace(queryString["from"]))
-                from = queryString["from"];
-            else
-                bMissingParams = true;
-
-            string to = "";
-            if (!string.IsNullOrWhiteSpace(queryString["to"]))
-                to = queryString["to"];
-            else
-                bMissingParams = true;
-
-            HttpResponseMessage responseMsg = null;
-
-            if (bMissingParams)
+            if (string.IsNullOrWhiteSpace(from) || string.IsNullOrWhiteSpace(to))
             {
-                responseMsg = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                return responseMsg;
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
             }
 
             // We seem to have params. Get the directions.
-            Directions dirs = m_directionsProvider.getDirections(from, to);
+            Directions dirs = await m_directionsProvider.getDirections(from, to);
 
-            try
-            {
-                responseMsg = this.Request.CreateResponse(HttpStatusCode.OK, dirs);
-            }
-            catch(Exception)
-            {
-                responseMsg = this.Request.CreateResponse(HttpStatusCode.InternalServerError);
-            }
-
-            return responseMsg;
+            return dirs;
         }
     }
 }
