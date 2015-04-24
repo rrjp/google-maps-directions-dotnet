@@ -22,6 +22,7 @@ angular.module("gdirApp", ["ngResource", "customFilters"])
        		console.log(response);
        		if ("errorMessage" in response)
        		{
+				$scope.directions = null;
        			alert(response.errorMessage);
        		}
         }, function(error) {
